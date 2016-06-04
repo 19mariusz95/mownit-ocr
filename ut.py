@@ -7,7 +7,7 @@ import numpy as np
 
 sizes = [72, 48, 36, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 9]
 
-chars = "tabpeocjdfghkmnrsuwyvxzli0123456789?!"
+chars = "tjabpedgocfhkmnrsuwyvxzli0123456789?!"
 
 tmpb = 2
 
@@ -37,7 +37,7 @@ def findchar(img, font, char, fft):
             if ifft[i][j] < 0.9:
                 ifft[i][j] = 0
             elif ifft[i][j] <= 1:
-                ddraw.rectangle([j - siz[0] + tmpb, i - siz[1] + tmpb, j - tmpb, i - tmpb], fill="black")
+                ddraw.rectangle([j - siz[0] + tmpb, i - siz[1] + tmpb - 1, j - tmpb, i - tmpb + 1], fill="black")
                 # img.show()
                 list.append([i - siz[1], j - siz[0], char, ifft[i][j]])
                 count += 1
@@ -65,10 +65,13 @@ def checkfont(image, fontfilename):
         result = execute(img, font, fft)
         result = [x for x in result if len(x) > 1]
         result = sorted(result, key=lambda element: (element[0], element[1]))
-        max = -1
+        sum = 0
         for x in result:
-            if x[3] > max:
-                max = x[3]
-        list.append([result, font, size, max])
+            sum += x[3]
+        if len(result) > 0:
+            tmp = sum / len(result)
+        else:
+            tmp = 0
+        list.append([result, font, size, tmp])
         img = image.copy()
     return list
