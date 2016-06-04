@@ -44,7 +44,7 @@ def findchar(img, font, char, fft):
     return count, list
 
 
-def execute(img, font, fft):
+def execute(img, font):
     list = []
     for i in range(0, len(chars)):
         char = chars[i]
@@ -58,11 +58,10 @@ def checkfont(image, fontfilename):
     print(fontfilename)
     file = "fonts/" + fontfilename
     img = image.copy()
-    fft = np.fft.rfft2(img)
     list = []
     for size in sizes:
         font = PIL.ImageFont.truetype(file, size)
-        result = execute(img, font, fft)
+        result = execute(img, font)
         result = [x for x in result if len(x) > 1]
         result = sorted(result, key=lambda element: (element[0], element[1]))
         sum = 0
