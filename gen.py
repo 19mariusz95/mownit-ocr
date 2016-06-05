@@ -45,6 +45,7 @@ while flaga:
     except Exception:
         flaga = False
 
-fimage = fimage.rotate(rot, expand=1)
+if rot != 0:
+    fimage = fimage.rotate(rot, expand=1)
 fimage = PIL.ImageOps.invert(fimage)
 fimage.save("test.png")

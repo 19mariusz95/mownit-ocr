@@ -14,18 +14,24 @@ tmpb = 2
 
 def findchar(img, font, char, fft):
     siz = font.getsize(char)
+    if char in ["l", "i", "1"]:
+        thresh = 0.97
+    elif char in [",", "."]:
+        thresh = 1.0
+    elif char == "!":
+        thresh = 0.999
+    else:
+        thresh = 0.9
     siz = [siz[0] + tmpb, siz[1] + tmpb]
-    # print(char, siz)
     fimage = Image.new("L", siz, 255)
     draw = PIL.ImageDraw.Draw(fimage)
     draw.text((1, 1), char, font=font, fill=0)
     fimage = PIL.ImageOps.invert(fimage)
-    # fimage.show()
 
     fft_e = np.fft.rfft2(np.rot90(fimage, 2), s=img.size[::-1])
     ifft = np.fft.irfft2(fft * fft_e)
-    ifftchar = np.fft.irfft2(np.fft.rfft2(fimage) * np.fft.rfft2(np.rot90(fimage, 2), s=fimage.size[::-1]))
-    max2 = ifftchar.max()
+    ifftchar = np.abs(np.fft.irfft2(np.fft.rfft2(fimage) * np.fft.rfft2(np.rot90(fimage, 2), s=fimage.size[::-1])))
+    max2 = np.max(ifftchar)
     count = 0
     list = []
     for i in range(0, ifft.shape[0]):
@@ -34,7 +40,7 @@ def findchar(img, font, char, fft):
     ddraw = PIL.ImageDraw.Draw(img)
     for i in range(0, ifft.shape[0]):
         for j in range(0, ifft.shape[1]):
-            if ifft[i][j] < 0.9:
+            if ifft[i][j] < thresh:
                 ifft[i][j] = 0
             elif ifft[i][j] <= 1:
                 ddraw.rectangle([j - siz[0] + tmpb, i - siz[1] + tmpb - 1, j - tmpb, i - tmpb + 1], fill="black")
