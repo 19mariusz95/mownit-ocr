@@ -1,13 +1,13 @@
 import PIL
-from PIL import ImageFont
-from PIL import ImageDraw
-from PIL import Image
-from PIL import ImageOps
 import numpy as np
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+from PIL import ImageOps
 
 sizes = [72, 48, 36, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 9]
 
-chars = "tjabpedgocfhkmnrsuwyvxzli0123456789?!"
+chars = "tjabpedgocfhkmnrsuwyvxzli0123456789?!,."
 
 tmpb = 2
 
@@ -19,7 +19,7 @@ def findchar(img, font, char, fft):
     elif char in [",", "."]:
         thresh = 1.0
     elif char == "!":
-        thresh = 0.999
+        thresh = 0.99
     else:
         thresh = 0.9
     siz = [siz[0] + tmpb, siz[1] + tmpb]

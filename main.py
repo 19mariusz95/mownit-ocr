@@ -2,10 +2,10 @@ import os
 import sys
 
 from PIL import Image
-
-from aut import repair_angle
-from ut import checkfont, tmpb
 from PIL import ImageOps
+
+from angle import repair_angle
+from ut import checkfont, tmpb
 
 alf = ".,!?0123456789abcdefghijklmnoprstuwyvxz"
 
@@ -43,6 +43,14 @@ image = Image.open(file_name)
 image = image.convert('L')
 
 image = ImageOps.invert(image)
+# image = numpy.asarray(image)
+# image.flags.writeable = True
+# for i in range(0, image.shape[0]):
+#     for j in range(0, image.shape[1]):
+#         image[i][j] = 255 - image[i][j]
+# image = Image.fromarray(image)
+
+image = repair_angle(image)
 
 font_folder = 'fonts'
 results = []
@@ -51,6 +59,9 @@ for fontfilename in os.listdir(font_folder):
     results += checkfont(image, fontfilename)
 
 results = sorted(results, key=lambda element: (element[3], element[2]), reverse=True)
+
+for x in results:
+    print(x[1].getname(), x[2], len(x[0]), x[3])
 
 for i in range(0, 3):
     print_result(results[i])

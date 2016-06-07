@@ -46,6 +46,6 @@ while flaga:
         flaga = False
 
 if rot != 0:
-    fimage = fimage.rotate(rot, expand=1)
+    fimage = fimage.rotate(rot, expand=1, resample=Image.BICUBIC)
 fimage = PIL.ImageOps.invert(fimage)
 fimage.save("test.png")
